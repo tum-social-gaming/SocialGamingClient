@@ -67,13 +67,27 @@ import de.tum.socialcomp.android.sensor.ShakeListener;
 import de.tum.socialcomp.android.ui.AppSectionsPagerAdapter;
 import de.tum.socialcomp.android.webservices.util.HttpPoster;
 
-@SuppressLint({ "NewApi", "ValidFragment" })
-public class MainActivity extends FragmentActivity implements
-		ActionBar.TabListener {
+/**
+ * This is class represents the main activity of the game,
+ * it manages the UI but also the game logic including
+ * setting up services such as the Facebook login data
+ * and the Google Cloud Messaging. 
+ * 
+ * To maneuver through the code, it is best to start with the
+ * 	void onCreate(Bundle savedInstanceState) - method.
+ * 
+ * 
+ * 
+ * @author Niklas Klügel
+ *
+ */
 
-	// Google CLoud MEssaging / Play Service specifics
-	public static final String EXTRA_MESSAGE = "message";
-	public static final String PROPERTY_GCM_REG_ID = "GCMDeviceID";
+@SuppressLint({ "NewApi", "ValidFragment" })
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+
+	// Google Cloud Messaging / Play Service specifics
+	private static final String EXTRA_MESSAGE = "message";
+	private static final String PROPERTY_GCM_REG_ID = "GCMDeviceID";
 	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 	// For SharedPreferences and GM & FacebookData
@@ -87,11 +101,13 @@ public class MainActivity extends FragmentActivity implements
 	private static final String GCM_TAG = "GCM";
 	private static final String FB_TAG = "Facebook";
 
+	/**
+	 * Shared attributes
+	 */
 	private GoogleCloudMessaging gcm;
-	private AtomicInteger msgId = new AtomicInteger();
 	private SharedPreferences prefs;
 	private Context context;
-	private String regId;
+	
 
 	private ShakeListener shakeListener;
 	private LocationManager locationManager;
@@ -101,6 +117,12 @@ public class MainActivity extends FragmentActivity implements
 	private AppSectionsPagerAdapter appSectionsPagerAdapter;
 
 	private static MainActivity instance = null;
+	
+	
+	
+	
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,13 +136,12 @@ public class MainActivity extends FragmentActivity implements
 
 		// This logs the Keyhash used by Facebook for App development
 		// (convenience)
-		this.logKeyhash();
+		this.logKeyhash();		
 		
-		
-		
-		/***
-		 *** The important parts of the initialization
-		 ***/
+		/**********************************
+		 *** The important parts of the initialization start here
+		 ***
+		 **********************************/
 
 		/*****
 		 * 
@@ -155,25 +176,7 @@ public class MainActivity extends FragmentActivity implements
 		this.initFacebookSessionAndLoginOnCallback();
 
 	}
-
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
-	}
-
-	@Override
-	public void onTabSelected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
-		// When the given tab is selected, switch to the corresponding page in
-		// the ViewPager.
-		viewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabReselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
-	}
-
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -186,14 +189,6 @@ public class MainActivity extends FragmentActivity implements
 	public void onPause() {
 		shakeListener.pause();
 		super.onPause();
-	}
-
-	// this is used to show a timestamp
-	private long startTime = 0L;
-
-	public void initLogView() {
-		startTime = System.currentTimeMillis();
-
 	}
 
 	/**
@@ -284,6 +279,13 @@ public class MainActivity extends FragmentActivity implements
 		return instance;
 	}
 	
+	// this is used to show a timestamp
+	private long startTime = 0L;
+	public void initLogView() {
+		startTime = System.currentTimeMillis();
+
+	}
+	
 	/**
 	 * Shows a simple log message on the MainSectionFragment.
 	 * This is used to show that the application logged in.
@@ -365,7 +367,7 @@ public class MainActivity extends FragmentActivity implements
 		// GCM registration.
 		if (checkPlayServices()) {
 			gcm = GoogleCloudMessaging.getInstance(this);
-			regId = getGoogleCloudMessagingRegistrationID(context);
+			String regId = getGoogleCloudMessagingRegistrationID(context);
 
 			if (regId.isEmpty()) {
 				registerGoogleCloudMessagingInBackground();
@@ -589,11 +591,29 @@ public class MainActivity extends FragmentActivity implements
 	void showDialog(final Dialog dia) {
 		dia.show();
 	}
+	
+
+	@Override
+	public void onTabUnselected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+	}
+
+	@Override
+	public void onTabSelected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+		// When the given tab is selected, switch to the corresponding page in
+		// the ViewPager.
+		viewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabReselected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+	}
+
 
 	private SharedPreferences getSharedPreferences(Context context) {
 		// This sample app persists the registration ID in shared preferences,
-		// but
-		// how you store the regID in your app is up to you.
 		return getSharedPreferences(MainActivity.class.getSimpleName(),
 				Context.MODE_PRIVATE);
 	}
@@ -619,7 +639,7 @@ public class MainActivity extends FragmentActivity implements
 					if (gcm == null) {
 						gcm = GoogleCloudMessaging.getInstance(context);
 					}
-					regId = gcm.register(Configuration.GoogleCloudMessagingSenderID);
+					String regId = gcm.register(Configuration.GoogleCloudMessagingSenderID);
 					msg = ">>Device registered, registration ID=" + regId;
 					storeGoogleCloudMessagingDeviceID(context, regId);
 				} catch (IOException ex) {
