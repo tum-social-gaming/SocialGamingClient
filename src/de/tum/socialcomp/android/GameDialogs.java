@@ -4,6 +4,8 @@ package de.tum.socialcomp.android;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.tum.socialcomp.android.webservices.util.HttpPoster;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

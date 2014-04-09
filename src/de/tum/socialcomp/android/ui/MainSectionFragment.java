@@ -1,11 +1,24 @@
-package de.tum.socialcomp.android;
+package de.tum.socialcomp.android.ui;
 
+import de.tum.socialcomp.android.MainActivity;
+import de.tum.socialcomp.android.R;
+import de.tum.socialcomp.android.R.id;
+import de.tum.socialcomp.android.R.layout;
+import de.tum.socialcomp.android.webservices.util.HttpPoster;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * This Fragment is used to start the game, it simply
+ * shows one button that triggers a request at the 
+ * webservice to start new game.
+ *  
+ * @author Niklas Klügel
+ *
+ */
 public class MainSectionFragment extends Fragment {
 
     @Override

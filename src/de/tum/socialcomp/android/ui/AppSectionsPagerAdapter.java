@@ -1,4 +1,4 @@
-package de.tum.socialcomp.android;
+package de.tum.socialcomp.android.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

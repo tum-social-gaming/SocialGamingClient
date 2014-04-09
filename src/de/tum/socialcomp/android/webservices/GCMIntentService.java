@@ -1,9 +1,11 @@
-package de.tum.socialcomp.android;
+package de.tum.socialcomp.android.webservices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import de.tum.socialcomp.android.MainActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

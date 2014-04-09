@@ -1,4 +1,4 @@
-package de.tum.socialcomp.android;
+package de.tum.socialcomp.android.webservices.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +16,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
+import de.tum.socialcomp.android.Configuration;
 
 import android.os.AsyncTask;
 import android.util.Log;

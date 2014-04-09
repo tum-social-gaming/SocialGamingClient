@@ -1,4 +1,4 @@
-package de.tum.socialcomp.android;
+package de.tum.socialcomp.android.webservices;
 
 import android.app.Activity;
 import android.content.ComponentName;

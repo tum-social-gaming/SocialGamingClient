@@ -52,14 +52,14 @@
         
         
         <receiver
-            android:name=".GCMBroadcastReceiver"
+            android:name="de.tum.socialcomp.android.webservices.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="de.tum.socialcomp.android" />
             </intent-filter>
         </receiver>
-        <service android:name=".GCMIntentService" />
+        <service android:name="de.tum.socialcomp.android.webservices.GCMIntentService" />
         
         
           <activity android:name=".MainFragmentActivity" android:label="@string/demo_collection" />

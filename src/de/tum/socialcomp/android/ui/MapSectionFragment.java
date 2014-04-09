@@ -1,4 +1,4 @@
-package de.tum.socialcomp.android;
+package de.tum.socialcomp.android.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +24,13 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import de.tum.socialcomp.android.GameDialogs;
+import de.tum.socialcomp.android.MainActivity;
+import de.tum.socialcomp.android.R;
+import de.tum.socialcomp.android.R.id;
+import de.tum.socialcomp.android.R.layout;
+import de.tum.socialcomp.android.webservices.util.HttpGetter;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,17 +46,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+/**
+ * This Fragment shows the Map View for the game, it sports a refresh button
+ * that requests all users that are nearby from the webservice and shows
+ * them on the map.
+ * 
+ * There are two additional functions:
+ * - When another user is tapped on the map the name is shown.
+ * - When performed a tap & hold on the other user he/she can be poked (a dialog will appear).
+ * 
+ * 
+ * @author Niklas Klügel
+ *
+ */
+
 public class MapSectionFragment extends Fragment {
 	private MapView mapView;
 	private IMapController mapController;
-	private ScaleBarOverlay scaleBarOverlay;
 	private MyLocationNewOverlay myLocationOverlay;
 	
 	// this hash map will be used for long presses on a user on the map to resolve the facebookID
 	private HashMap<OverlayItem, String> overlayItemToFacebookIDMap = new HashMap<OverlayItem, String>();
 	private Object hashMapMutex = new Object();
-	
-	ArrayList<OverlayItem> anotherOverlayItemArray;
 	
 	
 	 OnItemGestureListener<OverlayItem> myOnItemGestureListener
@@ -115,38 +133,11 @@ public class MapSectionFragment extends Fragment {
                             .getMyLocation());
                 }
             });
-        
-        //LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        
+   
         myLocationOverlay.setDrawAccuracyEnabled(true);
         myLocationOverlay.setOptionsMenuEnabled(true);
         
         mapView.getOverlays().add(myLocationOverlay);
-        
-        
-        //ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(rootView);
-        //mapView.getOverlays().add(scaleBarOverlay);
-        
-        
-
-     
-       /* 
-        Location lastMe = locationManager.getLastKnownLocation(locationManager.getBestProvider(new Criteria(), false));
-        int lat = (int) (lastMe.getLatitude() * 1E6); 
-        int lng = (int) (lastMe.getLongitude() * 1E6); 
-        GeoPoint gpt = new GeoPoint(lat, lng); 
-        */
-        
-        //OverlayItem me = new OverlayItem("MEEEEE", "MEEEEE", gpt ); 
-        //me.setMarker(this.getResources().getDrawable(R.drawable.ic_launcher));
-        //anotherOverlayItemArray.add(me);
-        
-        /*ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay 
-         = new ItemizedIconOverlay<OverlayItem>(
-           this, anotherOverlayItemArray, myOnItemGestureListener);        
-        */
-        //mapView.getOverlays().add(anotherItemizedIconOverlay);      
         
         
 	    rootView.findViewById(R.id.refresh_map_button)
@@ -155,8 +146,6 @@ public class MapSectionFragment extends Fragment {
             public void onClick(View view) {
             	// request user data from the database - the server should already know 
             	// our position through constant updates by the Location updates
-            	
-            	GeoPoint loc = myLocationOverlay.getMyLocation();
             	
             	String facebookID = MainActivity.getInstance().getFacebookID(getActivity());
             	
@@ -205,13 +194,13 @@ public class MapSectionFragment extends Fragment {
 						overlays.add(myLocationOverlay);
 						overlays.add(itemizedIconOverlay);
 						
-						Log.v("SDF", "added overlays");
+						Log.v(this.getClass().getName(), "added overlays");
 						
 						
 						
 					}
 					
-				} catch (Exception e) { // various Exception can be thrown in the process, for brevity we do a 'catch all' 
+				} catch (Exception e) { // various Exceptions can be thrown in the process, for brevity we do a 'catch all' 
 					Log.e("Map", e.getMessage());
 				} 
             	
@@ -235,18 +224,5 @@ public class MapSectionFragment extends Fragment {
     	myLocationOverlay.enableFollowLocation();
     	super.onResume();
     }
-
-	
-	/*
-	public void trashMe(View view) {
-		EditText et  = (EditText) findViewById(R.id.edit_message);
-		
-		String s= et.getText().toString();
-		
-		TextView tv = (TextView) findViewById(R.id.textView1);
-		
-		tv.setText(s);
-		
-	}*/
 
 }
