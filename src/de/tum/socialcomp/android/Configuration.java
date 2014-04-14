@@ -23,6 +23,6 @@ public class Configuration {
 	 * from the API Console, as described in "Getting Started."
 	 */
 	
-	public static final String GoogleCloudMessagingSenderID = "1085161367964";
+	public static final String GoogleCloudMessagingSenderID = "";
 
 }
