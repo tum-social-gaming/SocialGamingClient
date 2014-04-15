@@ -340,13 +340,24 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		// Use both, gps and network, on the cost of battery drain. But this way
 		// we are likely to get some localization information in most cases.
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,
-				Configuration.MinimumDistanceForLocationUpdates,
-				locationChangeListener);
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 1,
-				Configuration.MinimumDistanceForLocationUpdates,
-				locationChangeListener);
+		if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+			
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,
+					Configuration.MinimumDistanceForLocationUpdates,
+					locationChangeListener);
+		} else {
+			Log.e(this.getClass().getName(), "Pos: GPS not available!");
+		}
+		
+		if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ) {
+			
+			locationManager.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, 1,
+					Configuration.MinimumDistanceForLocationUpdates,
+					locationChangeListener);
+		} else {
+			Log.e(this.getClass().getName(),"Pos: Net. Provider not available!");
+		}
 
 	}
 
