@@ -3,6 +3,7 @@ package de.tum.socialcomp.android;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.http.HttpResponse;
@@ -51,9 +52,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethod.SessionCallback;
 
 // facebook imports
 import com.facebook.*;
+import com.facebook.Session.StatusCallback;
 import com.facebook.model.*;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -409,13 +412,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	 */
 	private void initFacebookSessionAndLoginOnCallback() {
 		Log.i(this.getClass().getName(), "Trying to log in to Facebook...");
-		// start Facebook Login
-		Session.openActiveSession(this, true, new Session.StatusCallback() {
+		// start Facebook Login		
+		
+		
+		final StatusCallback callback =  new Session.StatusCallback() {
 
 			// callback when session changes state
 			@Override
-			public void call(Session session, SessionState state,
+			public void call(Session session, SessionState state,					
 					Exception exception) {
+				
 				Log.e("FACEBOOK", " session exception => " + exception
 						+ " session state " + state);
 
@@ -475,8 +481,25 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 							});
 				}
 			}
-		});
+		};
+		
+		final Session.OpenRequest request = new Session.OpenRequest(this);
+		
+		request.setPermissions(Arrays.asList("user_friends"));
+		
+		request.setCallback(callback);
+		
+		Session session = Session.getActiveSession();
+		
+		if(session == null || session.isClosed()) {
+			session = new Session(this);			
+		}
+		
+		Session.setActiveSession(session);
+		
+		session.openForRead(request);
 	}
+
 
 	
 	
@@ -746,8 +769,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Session.getActiveSession().onActivityResult(this, requestCode,
-				resultCode, data);
+		if (Session.getActiveSession() != null && resultCode == RESULT_OK) {
+			Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+		} else {
+			Log.e(FB_TAG, "Failed to open session!");
+		}				
 	}
 
 	private boolean checkPlayServices() {
