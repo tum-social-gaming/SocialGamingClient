@@ -412,9 +412,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	 */
 	private void initFacebookSessionAndLoginOnCallback() {
 		Log.i(this.getClass().getName(), "Trying to log in to Facebook...");
+				
 		// start Facebook Login		
-		
-		
+				
 		final StatusCallback callback =  new Session.StatusCallback() {
 
 			// callback when session changes state
@@ -484,6 +484,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		};
 		
 		final Session.OpenRequest request = new Session.OpenRequest(this);
+		
+		// request special permissions for the app, in our case we want to get
+		// the user's friends (who are also using the application)
 		
 		request.setPermissions(Arrays.asList("user_friends"));
 		
