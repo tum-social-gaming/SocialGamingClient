@@ -497,10 +497,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		if(session == null || session.isClosed()) {
 			session = new Session(this);			
 		}
+				
+		if(!session.isOpened()) {
+			session.openForRead(request);
+		}
 		
 		Session.setActiveSession(session);
-		
-		session.openForRead(request);
+
 	}
 
 
